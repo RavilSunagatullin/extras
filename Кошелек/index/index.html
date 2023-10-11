@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="../normal.css" />
+    <script src="script.js" defer></script>
+    <style>
+      .d-none {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Просмотр статистики по дням неделям категориям -->
+    <!-- Рекомендации по снижению расходов -->
+    <!-- Форматирование цифр -->
+
+    <div class="auth-false">
+      <h1>Auth false</h1>
+      <form action="../form/form.html">
+        <button type="submit" id="exit">Back</button>
+      </form>
+    </div>
+    <div class="auth-true">
+      <div class="panel">
+        <h1 class="panel__balance">Balance: <span id="balance">0</span></h1>
+        <div class="panel__sub-info">
+          <h2 id="loginTitle">Login</h2>
+          <h2 id="passwordTitle">Password</h2>
+        </div>
+      </div>
+      <div class="form-panels">
+        <div class="income form">
+          <label for="incomeTitle" class="form__label">Add income:</label>
+          <input
+            type="text"
+            placeholder="Title of income"
+            id="incomeTitle"
+            class="form__input"
+          />
+          <input
+            type="number"
+            placeholder="Sum of income"
+            id="incomeSum"
+            class="form__input"
+          />
+          <input
+            type="date"
+            placeholder="Data of income"
+            id="incomeData"
+            class="form__input"
+          />
+          <select name="incomeSelect" id="incomeSelect" class="form__input">
+            <option value="Buy" selected class="option">seld</option>
+          </select>
+          <button id="incomeBtn">Add</button>
+        </div>
+        <div class="expense form">
+          <label for="expenseTitle" class="form__label">Add expense:</label>
+          <input
+            type="text"
+            placeholder="Title of expense"
+            id="expenseTitle"
+            class="form__input"
+          />
+          <input
+            type="number"
+            placeholder="Sum of expense"
+            id="expenseSum"
+            class="form__input"
+          />
+          <input
+            type="date"
+            placeholder="Data of expense"
+            id="expenseData"
+            class="form__input"
+          />
+          <select name="expenseSelect" id="expenseSelect" class="form__input">
+            <option value="Buy">buy</option>
+          </select>
+          <button id="expenseBtn">Add</button>
+        </div>
+        <div class="category form">
+          <label for="categoryTitle" class="form__label">Add category:</label>
+          <input
+            type="text"
+            placeholder="Title of category"
+            id="categoryTitle"
+            class="form__input"
+          />
+          <button id="categoryBtn">Add</button>
+        </div>
+      </div>
+      <div class="data-of-panels">
+        <ul id="categories" class="data-panel">
+          <li class="no-delete">Categories:</li>
+        </ul>
+        <ul id="incomes" class="data-panel">
+          <li class="no-delete">Incomes:</li>
+        </ul>
+        <ul id="expenses" class="data-panel">
+          <li class="no-delete">Expenses:</li>
+        </ul>
+      </div>
+      <div class="rest">
+        <div class="update-password form">
+          <label for="updatePassword" class="form__label"
+            >Update Password:</label
+          >
+          <input
+            type="text"
+            placeholder="Password"
+            id="updatePassword"
+            class="form__input"
+          />
+          <input
+            type="password"
+            placeholder="Confirm password"
+            id="confirmPassword"
+            class="form__input"
+          />
+          <button id="updatePasswordBtn">Update</button>
+          <p class="d-none" id="confirmAlarm">Not confirm password</p>
+          <p class="d-none" id="updateAlarm">Updated</p>
+          <form action="../form/form.html">
+            <button type="submit" id="exit" style="width: 100%">Exit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

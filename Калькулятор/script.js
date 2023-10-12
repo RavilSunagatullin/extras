@@ -11,7 +11,7 @@ const buttons = document.querySelectorAll('.button').forEach(function(item){
         if(numbersArr.includes(el.target.value)){
             return numFunc(el.target.value)
         }
-        if(el.target.value === '='){
+        if(el.target.value == '='){
             return equalsFunc(el.target.value)
         }
         if(anyFunctions.includes(el.target.value)){
@@ -30,11 +30,26 @@ function signsFunc (num){
     input.value = input.value + num
 }
 function anyFunc(num){
-    console.log(num)
+   if(num === 'с'){
+        return input.value = input.value.slice(0, -1)
+   }
+   if(num === 'a/c'){
+    return input.value = ''
+   }
+   if(num === '%'){
+    let preResult = input.value.replace(/[A-Z]/gi, '')
+    preResult = preResult.replace(/[А-Я]/gi, '')
+    let result = eval(preResult)
+    result = result*0.01
+    input.value = result
+   }
 }
 function numFunc(num){
     input.value = input.value + num
 }
 function equalsFunc(num){
-    console.log(num)
+    let preResult = input.value.replace(/[A-Z]/gi, '')
+    preResult = preResult.replace(/[А-Я]/gi, '')
+    let result = eval(preResult)
+    input.value = result
 }

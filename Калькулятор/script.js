@@ -53,3 +53,10 @@ function equalsFunc(num){
     let result = eval(preResult)
     input.value = result
 }
+
+// массив с номерами из истории
+// пробегаемся по массиву 
+// и сохранем:
+// localStorage.setItem(array, JSON.stringify(array));
+// array = JSON.parse(localStorage.getItem("array"));
+// сама история это строки

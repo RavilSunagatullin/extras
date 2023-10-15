@@ -27,9 +27,11 @@ const buttons = document.querySelectorAll(".button").forEach(function (item) {
     }
   };
 });
+
 function signsFunc(num) {
   input.value = input.value + num;
 }
+
 function anyFunc(num) {
   if (num === "с") {
     return (input.value = input.value.slice(0, -1));
@@ -45,62 +47,112 @@ function anyFunc(num) {
     input.value = result;
   }
 }
+
 function numFunc(num) {
   input.value = input.value + num;
 }
+
 function equalsFunc(num) {
   let preResult = input.value.replace(/[A-Z]/gi, "");
   preResult = preResult.replace(/[А-Я]/gi, "");
   let result = eval(preResult);
-  // округление до 4 цифр
-  // исправление ошибок
+  if (!Number.isInteger(result)) {
+    result = result.toFixed(4);
+    result = parseFloat(result);
+  }
   createHistory(`${preResult} = ${result}`);
   input.value = result;
 }
 
-// массив с номерами из истории
-// пробегаемся по массиву
-// и сохранем:
-// localStorage.setItem(array, JSON.stringify(array))
-// array = JSON.parse(localStorage.getItem("array"))
-// сама история это строки
+let today = new Date();
+let hour = today.getHours();
+let minutes = today.getMinutes();
+let day = today.getDay();
+let mounth = today.getMonth();
+let year = today.getFullYear();
+let seconds = today.getSeconds();
+function refreshData() {
+  hour = today.getHours();
+  minutes = today.getMinutes();
+  day = today.getDate();
+  mounth = today.getMonth();
+  year = today.getFullYear();
+  seconds = today.getSeconds();
+  if (hour < 10) {
+    hour.toString();
+    hour = "0" + hour;
+  }
+  if (minutes < 10) {
+    minutes.toString();
+    minutes = "0" + minutes;
+  }
+  if (mounth < 10) {
+    mounth.toString();
+    mounth = "0" + mounth;
+  }
+  if (day < 10) {
+    day.toString();
+    day = "0" + day;
+  }
+}
+
 const lists = document.querySelector(".lists");
-// function getData() {
-//   let today = new Date();
-//   let hour = today.getHours();
-//   let minutes = today.getMinutes();
-//   let day = today.getDay();
-//   let mounth = today.getMonth();
-//   let year = today.getFullYear();
-//   let seconds = today.getSeconds();
-//   if (hour < 10) {
-//     hour.toString();
-//     hour = "0" + hour;
-//   }
-//   if (minutes < 10) {
-//     minutes.toString();
-//     minutes = "0" + minutes;
-//   }
-//   if (mounth < 10) {
-//     mounth.toString();
-//     mounth = "0" + mounth;
-//   }
-//   if (day < 10) {
-//     day.toString();
-//     day = "0" + day;
-//   }
-//   return hour, minutes, day, mounth, year, seconds
-// }
+let historyArr = JSON.parse(localStorage.getItem("historyArr")) || [];
+if (!historyArr == []) {
+  historyArr.forEach(function (item) {
+    let char = localStorage.getItem(item);
+    let historyItem = document.createElement("li");
+    historyItem.setAttribute("class", "item");
+    refreshData();
+    historyItem.textContent = `${char}`;
+    checkHistory();
+    lists.append(historyItem);
+  });
+}
 
 function createHistory(item) {
   let historyItem = document.createElement("li");
   historyItem.setAttribute("class", "item");
-//   historyItem.textContent = `${item}, ${hour}:${minutes}:${seconds}, ${year}.${mounth}.${day}`;
-  //   historyItem.textContent = `${item}, ${utcDateOne}`;
-//   lists.append(historyItem);
+  refreshData();
+  historyItem.textContent = `${item}, ${hour}:${minutes}:${seconds}, ${year}.${mounth}.${day}`;
+  let idTime = new Date();
+  let id = idTime.getTime();
+  localStorage.setItem(id, historyItem.textContent);
+  historyArr.push(id);
+  localStorage.setItem("historyArr", JSON.stringify(historyArr));
+  checkHistory();
+  lists.append(historyItem);
 }
-// const items = document.querySelectorAll(".item").forEach(function (item) {
-//   item.onclick = function () {
-//     item.remove();
-//   };
-// });
+
+const itemsList = document.querySelector(".lists");
+itemsList.onclick = function () {
+  document.querySelectorAll(".item").forEach(function (el) {
+    el.onclick = function () {
+      historyArr.forEach(function (item) {
+        if (localStorage.getItem(item) === el.textContent) {
+          let index = historyArr.indexOf(item);
+          historyArr = historyArr.splice(index + 1, 1);
+          console.log(historyArr);
+          localStorage.setItem("historyArr", JSON.stringify(historyArr));
+          localStorage.removeItem(item);
+        }
+      });
+      checkHistory();
+      el.remove();
+    };
+  });
+};
+
+function checkHistory() {
+  if (historyArr.length > 13) {
+    document.querySelector("#main").classList.toggle(".positionAbsulute");
+  }
+}
+
+const spy = document
+  .querySelector("#main")
+  .addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      equalsFunc(input.value);
+    }
+  });

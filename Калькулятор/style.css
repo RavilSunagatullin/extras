@@ -82,5 +82,12 @@ main{
   margin-top: 10px;
 }
 .item{
-
+  background-color: #928880;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+}
+.positionAbsulute{
+  position: absolute;
+  top: 5px;
 }

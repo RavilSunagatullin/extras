@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <title>Title</title>
     <link rel="stylesheet" href="main.css" />
   </head>
   <body class="container">
+    <!-- сенсорный слайдер -->
+    <!-- https://codepen.io/maxakohler/pen/Yjzpzr -->
     <header class="header">
       <a href="#" class="header__left">
         <svg
@@ -15,21 +17,24 @@
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path class="header__logo-path"
+          <path
+            class="header__logo-path"
             d="M10.4167 10.4167C10.9375 13.5417 11.4583 15.1042 11.9792 18.75C12.3958 21.6667 12.5 26.2153 12.5 28.125C10.2431 29.1667 5.20834 31.25 5.20834 35.4167C5.20834 39.5833 10.4167 44.7917 25 44.7917C39.5833 44.7917 44.7917 39.5833 44.7917 35.4167C44.7917 31.25 37.5 28.125 37.5 28.125C37.5 28.125 37.5 22.3958 38.0208 18.75C38.5417 15.1042 39.0625 13.5417 39.5833 10.4167"
             stroke="#334450"
             stroke-width="4.16667"
             stroke-linecap="round"
             stroke-linejoin="round"
           />
-          <path  class="header__logo-path"
+          <path
+            class="header__logo-path"
             d="M37.5 28.125C37.5 32.2917 36.4583 36.4583 24.4792 36.4583"
             stroke="#334450"
             stroke-width="4.16667"
             stroke-linecap="round"
             stroke-linejoin="round"
           />
-          <path  class="header__logo-path"
+          <path
+            class="header__logo-path"
             d="M25 15.625C33.0542 15.625 39.5833 13.2932 39.5833 10.4167C39.5833 7.54019 33.0542 5.20834 25 5.20834C16.9459 5.20834 10.4167 7.54019 10.4167 10.4167C10.4167 13.2932 16.9459 15.625 25 15.625Z"
             stroke="#334450"
             stroke-width="4.16667"
@@ -44,7 +49,33 @@
         <a href="#" class="header__link">Мы в соц сетях</a>
       </div>
     </header>
-    <main class="content">Mainn</main>
+    <main class="content">
+      <section class="welcome">
+        <div class="welcome__left">
+          <span class="bg-text bg-text--first">Шапка-невидимка</span>
+          <h1>Шапка-невидимка</h1>
+          <span class="bg-text bg-text--second">Впервые в России</span>
+          <h2>Впервые в России</h2>
+          <p>
+            Новейшая разработка российских ученых. <br />
+            При ношении сделает вас невидимым
+          </p>
+          <span class="bg-text bg-text--third">Крутая кепка</span>
+          <span class="bg-text bg-text--fouth">Невидимость</span>
+          <div class="welcome__form">
+            <input type="text" placeholder="Почта для предзаказа" />
+            <button>Отправить</button>
+          </div>
+        </div>
+        <div class="welcome__right">
+          <img
+            src="images/6284185860 1.jpg"
+            alt="Главная фотография"
+            class="welcome__img"
+          />
+        </div>
+      </section>
+    </main>
     <footer class="footer">footer</footer>
   </body>
 </html>

@@ -1,0 +1,72 @@
+.bg-text {
+    user-select: none;
+    transition: var(--animation);
+    position: absolute;
+    width: max-content;
+    font-weight: lighter;
+    line-height: normal;
+    -webkit-text-stroke: 1px var(--light-dark);
+    color: rgba(0, 0, 0, 0);
+  }
+  .bg-text--first {
+    top: -45px;
+    left: -45px;
+    font-size: 96px;
+  }
+  .bg-text--second {
+    top: 70px;
+    left: 330px;
+    font-size: 40px;
+  }
+  .bg-text--third {
+    top: 180px;
+    left: 380px;
+    font-size: 30px;
+  }
+  .bg-text--fouth {
+    top: 300px;
+    left: 5px;
+    font-size: 96px;
+  }
+  .bg-text--fifth{
+    max-width: 600px;
+    font-size: 48px;
+    top: 20px;
+  }
+  .bg-card-elemtent {
+    position: absolute;
+    z-index: -1;
+    border-radius: 8px;
+  }
+  .bg-card-elemtent--first {
+    height: 64px;
+    width: 64px;
+    background-color: var(--green);
+    transform: rotate(-145deg);
+    right: -30px;
+    top: 130px;
+  }
+  .bg-card-elemtent--second {
+    height: 160px;
+    width: 160px;
+    background-color: var(--yellow);
+    transform: rotate(74deg);
+    top: 250px;
+  }
+  .bg-card-elemtent--third {
+    height: 64px;
+    width: 64px;
+    background-color: var(--yellow);
+    transform: rotate(-145deg);
+    right: -30px;
+    top: 300px;
+    
+  }
+  .bg-card-elemtent--fourth {
+    height: 25px;
+    width: 25px;
+    background-color: var(--green);
+    transform: rotate(-145deg);
+    left: 309px;
+    top: 350px;
+  }

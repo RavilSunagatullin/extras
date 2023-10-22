@@ -17,6 +17,10 @@
     color:var(--white);
     padding: 11px;
     border-radius: 8px;
+    transition: var(--animation);
+}
+.tester__micro-card:hover{
+    transform: scale(1.1);
 }
 .tester__right {
     position: relative;
@@ -34,4 +38,5 @@
     background-color: var(--dark);
     color: var(--white);
     border-radius: 8px;
+    z-index: 10;
 }

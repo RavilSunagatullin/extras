@@ -35,8 +35,13 @@
   }
   .bg-card-elemtent {
     position: absolute;
-    z-index: -1;
+    z-index: 1;
     border-radius: 8px;
+    transition: var(--animation);
+  }
+  .bg-card-elemtent:hover{
+    transform: scale(1.3);
+    opacity: 0;
   }
   .bg-card-elemtent--first {
     height: 64px;

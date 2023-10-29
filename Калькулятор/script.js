@@ -13,8 +13,8 @@ const buttons = document.querySelectorAll(".button").forEach(function (item) {
     if (numbersArr.includes(el.target.value)) {
       return numFunc(el.target.value);
     }
-    if (el.target.value == "=") {
-      return equalsFunc(el.target.value);
+    if (el.target.value == "=") { 
+      return equalsFunc()
     }
     if (anyFunctions.includes(el.target.value)) {
       return anyFunc(el.target.value);
@@ -52,7 +52,7 @@ function numFunc(num) {
   input.value = input.value + num;
 }
 
-function equalsFunc(num) {
+function equalsFunc() {
   let preResult = input.value.replace(/[A-Z]/gi, "");
   preResult = preResult.replace(/[А-Я]/gi, "");
   let result = eval(preResult);
@@ -71,13 +71,19 @@ let day = today.getDay();
 let mounth = today.getMonth();
 let year = today.getFullYear();
 let seconds = today.getSeconds();
+
+
 function refreshData() {
   hour = today.getHours();
   minutes = today.getMinutes();
   day = today.getDate();
-  mounth = today.getMonth();
+  mounth = today.getMonth() + 1;
   year = today.getFullYear();
   seconds = today.getSeconds();
+  if(seconds < 10){
+    seconds.toString();
+    seconds = "0" + seconds;
+  }
   if (hour < 10) {
     hour.toString();
     hour = "0" + hour;
@@ -121,7 +127,8 @@ function createHistory(item) {
   historyArr.push(id);
   localStorage.setItem("historyArr", JSON.stringify(historyArr));
   checkHistory();
-  lists.append(historyItem);
+  
+  lists.insertAdjacentElement("afterbegin", historyItem)
 }
 
 const itemsList = document.querySelector(".lists");

@@ -1,0 +1,125 @@
+/* Стилизация всей страницы (Не нужно при копировании кода CSS) */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: all .5s;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Стилизация страницы (Не нужно при копировании кода CSS) */
+section.main{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Стилизация кнопки НАЧАЛО (Не нужно при копировании кода CSS) */
+button{
+    width: 500px;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+button:hover{
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+}
+/* Стилизация кнопки КОНЕЦ */
+
+/* Дальше будет код, который потребуется при написании кода анимированного сообщения */
+
+
+/* Стилизация блока, где будут храниться все сообщения */
+.message-main{
+    width: auto;
+    height: auto;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    overflow: hidden;
+}
+
+
+/* Стилизация самого блока одного сообщения */
+.message-box{
+    width: 400px;
+    height: auto;
+    border-radius: 15px;
+    padding: 10px 15px;
+    transform: translateX(50%);
+    animation: message-move 1s forwards;
+}
+
+/* Стилизация фона сообщения в случае успеха */
+.message-box.success{
+    background: linear-gradient(90deg, rgba(131,242,74,1) 0%, rgba(112,
+    170,44,1) 100%);
+}
+
+/* Стилизация фона сообщения в случае ошибки */
+.message-box.invalid{
+    background: linear-gradient(90deg, rgba(224,57,32,1) 0%, rgba(149,18,6,1) 100%);
+}
+
+/* Текст объявления статуса сообщения ("Успешно", либо же "Ошибка!") */
+.message-box h2{
+    color: white;
+    font-size: 24px;
+}
+
+/* Текст сообщения анимированного сообщения */
+.message-value{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: white;
+    font-size: 20px;
+    font-weight: 400;
+    padding: 10px 0;
+}
+
+/* Линия - оставшееся время показа сообщения (индикатор) */
+.message-value::after{
+    content: '';
+    width: 100%;
+    height: 10px;
+    border-radius: 10px;
+    background-color: white;
+    /* Здесь нужно будет менять время индикатора под себя в случае изменения кода JS */
+    animation: line-fade 4s forwards;
+}
+
+
+/* Анимация оставшегося времени показа анимированного сообщения */
+@keyframes line-fade {
+    0%{
+        width: 100%
+    }
+    100%{
+        width: 0%;
+    }
+}
+
+/* Анимация показа сообщения методом "Слайдинга справа влево" */
+@keyframes message-move {
+    0%{
+        transform: translateX(50%);
+    }
+    100%{
+        transform: translateX(0);
+    }
+}
+
+/* Это весь нужный код CSS */

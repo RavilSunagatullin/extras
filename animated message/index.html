@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./index.js" defer></script>
+</head>
+<body>
+    <!-- Секция main (Верстка этой секции исключительно для показа функции этой анимации) -->
+    <section class="main">
+        <!-- Кнопки для вызова анимированных сообщений (Здесь также можно заметить, как вызвать эти анимированные сообщения) -->
+        <button id="message" onclick="alertbox(false, 'Такая почта уже существует', 'Ошибка!')">Почта существует</button>
+        <button id="message" onclick="alertbox(true, 'Вы успешно вошли в аккаунт', 'Отлично!')">Вошел в аккаунт</button>
+
+        <!-- Сам главный блок показа всех анимированных сообщений (Нужно будет скопировать в свой код) -->
+        <div class="message-main"></div>
+    </section>
+</body>
+</html>

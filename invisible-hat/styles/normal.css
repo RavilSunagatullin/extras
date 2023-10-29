@@ -14,21 +14,18 @@
 }
 :root {
   --dark: #334450;
-  --light-dark: rgba(51, 68, 80, 0.11);
+  --light-dark: rgba(51, 68, 80, 0.08);
   --semi-dark: rgba(51, 68, 80, 0.25);
   --light-blue: #66a1b6;
   --yellow: #fed650;
   --green: #046362;
   --white: #fff;
+  --animation: 0.3s cubic-bezier(0.31, 0.03, 0.66, 0.89);
 }
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-body,
-html {
-  height: 100%;
 }
 body {
   font-family: "Santello Regular", sans-serif;
@@ -47,12 +44,6 @@ body {
 .test {
   background-color: var(--light-dark);
   border: 1px solid var(--green);
-}
-.content {
-  flex: 1 0 auto;
-}
-.footer {
-  flex: 0 0 auto;
 }
 @keyframes rotate {
   0%,

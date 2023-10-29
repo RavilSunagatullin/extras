@@ -5,7 +5,7 @@
     height: 80px;
     align-items: center;
     border-bottom: 1px solid var(--light-dark);
-    margin-bottom: 36px;
+    /* margin-bottom: 36px; */
 }
 
 .header__left {
@@ -35,7 +35,7 @@
     height: 2px;
     display: block;
     background: var(--green);
-    transition: 0.5s;
+    transition: var(--animation);
 }
 .header__left:hover h3::after{
     width: 100%;
@@ -50,14 +50,27 @@
     gap: 15px;
 }
 .header__link {
+    position: relative;
     display: inline-block;
     padding: 12px 14px;
     border-radius: 8px;
-    border: 2px solid var(--dark);
     color:inherit;
     text-decoration: none;
     font-size: 24px;
     transition: all 0.5s ease;
+}
+.header__link::before{
+    opacity: 0.1;
+    content: '';
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    border-radius: 8px;
+    bottom: 0;
+    width: 0px;
+    display: block;
+    border: 2px solid var(--green);
+    transition: var(--animation);
 }
 .header__link::after{
     content: '';
@@ -65,12 +78,16 @@
     height: 2px;
     display: block;
     background: var(--green);
-    transition: 0.5s;
+    transition: var(--animation);
 }
 .header__link:hover{
-    border: 2px solid var(--green);
+    /* border: 2px solid var(--green); */
     color:var(--green);
 }
 .header__link:hover::after{
+    width: 100%;
+}
+.header__link:hover::before{
+    opacity: 1;
     width: 100%;
 }

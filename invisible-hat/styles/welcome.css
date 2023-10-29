@@ -1,0 +1,75 @@
+.welcome {
+  margin-top: 95px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  gap: 90px;
+}
+.welcome__left {
+  max-width: 570px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  color: var(--dark);
+  position: relative;
+  z-index: 10;
+}
+.welcome__left h1 {
+  font-size: 64px;
+  line-height: normal;
+}
+.welcome__left h2 {
+  font-size: 36px;
+}
+.welcome__left p {
+  font-size: 16px;
+}
+.welcome__form {
+  width: 464px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.welcome__form input {
+  transition: var(--animation);
+  outline: none;
+  width: 100%;
+  padding: 18px 22px;
+  border-radius: 29px;
+  border: none;
+  box-shadow: 0 17px 42px rgba(0, 0, 0, 0.12);
+  font-size: 16px;
+}
+.welcome__form input:focus {
+  box-shadow: 0 17px 22px rgba(102, 161, 182, 0.25);
+}
+.welcome__form button {
+  border-radius: 29px;
+  padding: 17px 32px;
+  position: absolute;
+  color: var(--white);
+  background-color: var(--green);
+  font-size: 16px;
+  right: 0;
+  border: none;
+  transition: var(--animation);
+}
+.welcome__form button:hover {
+  box-shadow: 0 10px 12px rgba(102, 161, 182, 0.2);
+}
+.welcome__right {
+  z-index: 10;
+  border-radius: 8px;
+  background-color: #e9eeee;
+}
+
+.welcome__img {
+  opacity: 1;
+  width: 100%;
+  height: 100%;
+  transition: var(--animation);
+}
+.welcome__img:hover,
+.bg-text:hover {
+  opacity: 0.03;
+}

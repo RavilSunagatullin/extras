@@ -1,0 +1,15 @@
+custom Checks and radios
+custom Range
+custom Floating labels
+custom Accordion
+custom Carousel
+custom Collapse
+custom Dropdowns
+custom Modal
+custom Rubber navbar
+custom Offcanvas
+custom Popovers
+custom Progress
+custom Scrollspy
+custom Toasts
+custom Tooltips

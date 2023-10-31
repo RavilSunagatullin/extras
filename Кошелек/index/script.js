@@ -21,8 +21,8 @@ const authTrue = document.querySelector(".auth-true");
 const balanceTag = document.querySelector("#balance");
 
 if (is_auth) {
-  passwordTitle.textContent = `Password: ${password}`;
-  loginTitle.textContent = `Login: ${login}`;
+  passwordTitle.textContent = `Пароль: ${password}`;
+  loginTitle.textContent = `Логин: ${login}`;
   authFalse.classList.add("d-none");
 } else {
   authTrue.classList.add("d-none");
@@ -59,21 +59,44 @@ updateBtn.onclick = function () {
 const categoryTitle = document.querySelector("#categoryTitle");
 const categoriesList = document.querySelector("#categories");
 
+const ActiveCategories = [];
+
 let localCategories = localStorage.getItem("localCategories") || "";
+
+// if (localCategories != "") {
+//   let localCategoriesArr = localCategories.split(",").forEach(function (el) {
+//     let categoryList = document.createElement("li");
+//     categoryList.setAttribute("class", "list");
+//     categoryList.textContent = `${el}`;
+//     let trash = document.createElement("div");
+//     trash.innerHTML =
+//       '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
+//     categoryList.append(trash);
+//     categoriesList.append(categoryList);
+//   });
+// }
 
 if (localCategories != "") {
   let localCategoriesArr = localCategories.split(",").forEach(function (el) {
     let categoryList = document.createElement("li");
-    categoryList.setAttribute("class", "list");
-    categoryList.textContent = `${el}`;
+    categoryList.innerHTML = `<label for="${el}" class="checkbox-label">
+      <input id="${el}" type="checkbox" class="checkbox" value="${el}"/>
+      <span class="check-style"></span>
+      ${el}
+      <div><svg class="svg svg-categories" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg></div>
+    </label>`;
     categoriesList.append(categoryList);
   });
 }
 
 categoryBtn.onclick = function () {
   let categoryList = document.createElement("li");
-  categoryList.setAttribute("class", "list");
-  categoryList.textContent = `${categoryTitle.value}`;
+  categoryList.innerHTML = `<label for="${categoryTitle.value}" class="checkbox-label">
+      <input id="${categoryTitle.value}" type="checkbox" class="checkbox" value="${categoryTitle.value}"/>
+      <span class="check-style"></span>
+      ${categoryTitle.value}
+      <div><svg class="svg svg-categories" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg></div>
+  </label>`;
   categoriesList.append(categoryList);
   if (localCategories == "") {
     localCategories += categoryTitle.value;
@@ -83,24 +106,31 @@ categoryBtn.onclick = function () {
   incomeCategory();
   expenseCategory();
   localStorage.setItem("localCategories", localCategories);
+  let svg = document.querySelectorAll(".svg-categories");
+  deleteCategories(svg);
 };
-categoriesList.onclick = function () {
-  let icomesArr = document.querySelectorAll(".list");
-  icomesArr.forEach(function (elem) {
-    elem.onclick = function () {
+let svg = document.querySelectorAll(".svg-categories");
+deleteCategories(svg);
+
+function deleteCategories(svg) {
+  console.log(svg);
+  svg.forEach(function (el) {
+    el.onclick = function (item) {
+      let some = el.parentNode.parentNode.textContent;
+      some = some.trim();
       localCategories.split(",").forEach(function (el) {
-        if (elem.textContent == el) {
+        if (some == el) {
           localCategories = localCategories.replace(el, "");
           localCategories = localCategories.replace(",", "");
         }
       });
-      elem.remove();
+      el.parentNode.parentNode.parentNode.remove();
       incomeCategory();
       expenseCategory();
       localStorage.setItem("localCategories", localCategories);
     };
   });
-};
+}
 
 // End category
 
@@ -126,19 +156,23 @@ function restoreIncomes() {
     let resultList = "";
     el.split(",").forEach(function (elem) {
       if (i == 1) {
-        incomeList.textContent = `Title: ${elem}`;
+        incomeList.textContent = `Загаловок: ${elem}`;
         resultList = incomeList.textContent + ", ";
       } else if (i == 2) {
-        incomeList.textContent = `sum: ${elem}`;
+        incomeList.textContent = `сумма: ${elem}`;
         resultList = resultList + incomeList.textContent + ", ";
       } else if (i == 3) {
-        incomeList.textContent = `date: ${elem}`;
+        incomeList.textContent = `дата: ${elem}`;
         resultList = resultList + incomeList.textContent + ", ";
       } else {
-        incomeList.textContent = `category: ${elem}`;
+        incomeList.textContent = `категория: ${elem}`;
         resultList = resultList + incomeList.textContent + " ";
         i = 0;
         incomeList.textContent = resultList;
+        let trash = document.createElement("div");
+        trash.innerHTML =
+          '<svg class="green-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
+        incomeList.append(trash);
         incomesList.append(incomeList);
       }
       i++;
@@ -169,7 +203,11 @@ incomeBtn.onclick = function () {
   localStorage.setItem("balance", Number(balanceTag.textContent));
   let incomeList = document.createElement("li");
   incomeList.setAttribute("class", "list");
-  incomeList.textContent = `Title: ${incomeTitle.value}, sum: ${incomeSum.value}, date: ${incomeData.value}, category: ${incomeSelect.value}`;
+  incomeList.textContent = `Загаловок: ${incomeTitle.value}, сумма: ${incomeSum.value}, дата: ${incomeData.value}, категория: ${incomeSelect.value}`;
+  let trash = document.createElement("div");
+  trash.innerHTML =
+    '<svg class="green-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
+  incomeList.append(trash);
   incomesList.append(incomeList);
   localIncomes += `${incomeTitle.value},${incomeSum.value},${incomeData.value},${incomeSelect.value}/`;
   localStorage.setItem("localIncomes", localIncomes);
@@ -179,13 +217,12 @@ incomesList.onclick = function () {
   let icomesArr = document.querySelectorAll(".list");
   icomesArr.forEach(function (el) {
     el.onclick = function () {
-      el.textContent = el.textContent.replace("Title: ", "");
-      el.textContent = el.textContent.replace(" sum: ", "");
-      el.textContent = el.textContent.replace(" date: ", "");
-      el.textContent = el.textContent.replace(" category: ", "");
+      el.textContent = el.textContent.replace("Загаловок: ", "");
+      el.textContent = el.textContent.replace(" сумма: ", "");
+      el.textContent = el.textContent.replace(" дата: ", "");
+      el.textContent = el.textContent.replace(" категория: ", "");
       el.textContent = el.textContent.slice(0, -1);
       localIncomes.split("/").forEach(function (elem) {
-        // Уменьшение балалнса при удалении
         // elem.split(",").forEach(function (word) {
         //   if (Number(word) >= 1) {
         //     balanceTag.textContent = `${
@@ -200,7 +237,6 @@ incomesList.onclick = function () {
           if (localIncomes[0] == "/") {
             localIncomes = localIncomes.replace("/", "");
           }
-          console.log("🚀 ~ file: script.js:192 ~ localIncomes:", localIncomes);
           localStorage.setItem("localIncomes", localIncomes);
         }
       });
@@ -229,19 +265,23 @@ function restoreExpenses() {
     let resultList = "";
     el.split(",").forEach(function (elem) {
       if (i == 1) {
-        expenseList.textContent = `Title: ${elem}`;
+        expenseList.textContent = `Загаловок: ${elem}`;
         resultList = expenseList.textContent + ", ";
       } else if (i == 2) {
-        expenseList.textContent = `sum: ${elem}`;
+        expenseList.textContent = `сумма: ${elem}`;
         resultList = resultList + expenseList.textContent + ", ";
       } else if (i == 3) {
-        expenseList.textContent = `date: ${elem}`;
+        expenseList.textContent = `дата: ${elem}`;
         resultList = resultList + expenseList.textContent + ", ";
       } else {
-        expenseList.textContent = `category: ${elem}`;
+        expenseList.textContent = `категория: ${elem}`;
         resultList = resultList + expenseList.textContent + " ";
         i = 0;
         expenseList.textContent = resultList;
+        let trash = document.createElement("div");
+        trash.innerHTML =
+          '<svg class="red-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
+        expenseList.append(trash);
         expensesList.append(expenseList);
       }
       i++;
@@ -273,7 +313,11 @@ expenseBtn.onclick = function () {
   localStorage.setItem("balance", Number(balanceTag.textContent));
   let expenseList = document.createElement("li");
   expenseList.setAttribute("class", "list");
-  expenseList.textContent = `Title: ${expenseTitle.value}, sum: ${expenseSum.value}, date: ${expenseData.value}, category: ${expenseSelect.value}`;
+  expenseList.textContent = `Загаловок: ${expenseTitle.value}, сумма: ${expenseSum.value}, дата: ${expenseData.value}, категория: ${expenseSelect.value}`;
+  let trash = document.createElement("div");
+  trash.innerHTML =
+    '<svg class="red-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
+  expenseList.append(trash);
   expensesList.append(expenseList);
   localExpenses += `${expenseTitle.value},${expenseSum.value},${expenseData.value},${expenseSelect.value}/`;
   localStorage.setItem("localExpenses", localExpenses);
@@ -283,10 +327,10 @@ expensesList.onclick = function () {
   icomesArr.forEach(function (el) {
     el.onclick = function () {
       el.remove();
-      el.textContent = el.textContent.replace("Title: ", "");
-      el.textContent = el.textContent.replace(" sum: ", "");
-      el.textContent = el.textContent.replace(" date: ", "");
-      el.textContent = el.textContent.replace(" category: ", "");
+      el.textContent = el.textContent.replace("Загаловок: ", "");
+      el.textContent = el.textContent.replace(" сумма: ", "");
+      el.textContent = el.textContent.replace(" дата: ", "");
+      el.textContent = el.textContent.replace(" категория: ", "");
       el.textContent = el.textContent.slice(0, -1);
       localExpenses.split("/").forEach(function (elem) {
         if (el.textContent == elem) {

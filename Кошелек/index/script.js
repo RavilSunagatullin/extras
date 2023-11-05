@@ -28,8 +28,10 @@ if (is_auth) {
   authTrue.classList.add("d-none");
 }
 
+const format = new Intl.NumberFormat("ru-RU");
 if (localStorage.getItem("balance") != null) {
-  balanceTag.textContent = localStorage.getItem("balance");
+  // balanceTag.textContent = localStorage.getItem("balance");
+  balanceTag.textContent = format.format(localStorage.getItem("balance"));
 } else {
   balanceTag.textContent = 0;
 }
@@ -59,22 +61,10 @@ updateBtn.onclick = function () {
 const categoryTitle = document.querySelector("#categoryTitle");
 const categoriesList = document.querySelector("#categories");
 
-const ActiveCategories = [];
-
 let localCategories = localStorage.getItem("localCategories") || "";
 
-// if (localCategories != "") {
-//   let localCategoriesArr = localCategories.split(",").forEach(function (el) {
-//     let categoryList = document.createElement("li");
-//     categoryList.setAttribute("class", "list");
-//     categoryList.textContent = `${el}`;
-//     let trash = document.createElement("div");
-//     trash.innerHTML =
-//       '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
-//     categoryList.append(trash);
-//     categoriesList.append(categoryList);
-//   });
-// }
+let ActiveCategories = [];
+let AllCategories = [];
 
 if (localCategories != "") {
   let localCategoriesArr = localCategories.split(",").forEach(function (el) {
@@ -87,12 +77,13 @@ if (localCategories != "") {
     </label>`;
     categoriesList.append(categoryList);
   });
+  restoreCategory();
 }
 
 categoryBtn.onclick = function () {
   let categoryList = document.createElement("li");
   categoryList.innerHTML = `<label for="${categoryTitle.value}" class="checkbox-label">
-      <input id="${categoryTitle.value}" type="checkbox" class="checkbox" value="${categoryTitle.value}"/>
+      <input checked id="${categoryTitle.value}" type="checkbox" class="checkbox" value="${categoryTitle.value}"/>
       <span class="check-style"></span>
       ${categoryTitle.value}
       <div><svg class="svg svg-categories" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg></div>
@@ -108,12 +99,15 @@ categoryBtn.onclick = function () {
   localStorage.setItem("localCategories", localCategories);
   let svg = document.querySelectorAll(".svg-categories");
   deleteCategories(svg);
+  ActiveCategories.push(categoryTitle.value);
+  // restoreCategory();
+  // ничего лучше как перезагрузка страницы не придумал
+  location.reload();
 };
 let svg = document.querySelectorAll(".svg-categories");
 deleteCategories(svg);
 
 function deleteCategories(svg) {
-  console.log(svg);
   svg.forEach(function (el) {
     el.onclick = function (item) {
       let some = el.parentNode.parentNode.textContent;
@@ -131,6 +125,31 @@ function deleteCategories(svg) {
     };
   });
 }
+function restoreCategory() {
+  if (localCategories != "") {
+    AllCategories = localCategories.split(",").forEach(function (el) {
+      document.querySelector(`#${el}`).addEventListener("input", function () {
+        // console.log("🚀 ~ file: script.js:129 ~ document.querySelector ~ AllCategories:", AllCategories)
+        if (!ActiveCategories.includes(el)) {
+          console.log("add");
+          ActiveCategories.push(el);
+          console.log(
+            "🚀 ~ file: script.js:131 ~ document.querySelector ~ ActiveCategories:",
+            ActiveCategories
+          );
+        } else {
+          console.log("delte");
+          ActiveCategories = ActiveCategories.filter((item) => el != item);
+          console.log(
+            "🚀 ~ file: script.js:135 ~ document.querySelector ~ ActiveCategories:",
+            ActiveCategories
+          );
+        }
+      });
+    });
+  }
+}
+// restoreCategory();
 
 // End category
 
@@ -200,6 +219,9 @@ incomeBtn.onclick = function () {
   balanceTag.textContent = `${
     Number(balanceTag.textContent) + Number(incomeSum.value)
   }`;
+  // форматирование
+  // let result =  Number(balanceTag.textContent) + Number(incomeSum.value)
+  // balanceTag.textContent = format.format(result)
   localStorage.setItem("balance", Number(balanceTag.textContent));
   let incomeList = document.createElement("li");
   incomeList.setAttribute("class", "list");
@@ -310,6 +332,9 @@ expenseBtn.onclick = function () {
   balanceTag.textContent = `${
     Number(balanceTag.textContent) - Number(expenseSum.value)
   }`;
+  // форматирование
+  // let result =  Number(balanceTag.textContent) - Number(expenseSum.value)
+  // balanceTag.textContent = format.format(result)
   localStorage.setItem("balance", Number(balanceTag.textContent));
   let expenseList = document.createElement("li");
   expenseList.setAttribute("class", "list");

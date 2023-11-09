@@ -63,7 +63,7 @@ const categoriesList = document.querySelector("#categories");
 
 let localCategories = localStorage.getItem("localCategories") || "";
 
-let ActiveCategories = localStorage.getItem("ActiveCategories") || [];
+let ActiveCategories = localStorage.getItem("ActiveCategories") || "";
 let AllCategories = [];
 
 if (localCategories != "") {
@@ -77,6 +77,11 @@ if (localCategories != "") {
     </label>`;
     categoriesList.append(categoryList);
   });
+  if (ActiveCategories.length != 0) {
+    ActiveCategories.split(",").forEach(function (el) {
+      document.querySelector(`#${el}`).setAttribute("checked", true);
+    });
+  }
   restoreCategory();
 }
 
@@ -84,26 +89,15 @@ categoryBtn.onclick = function () {
   if (/\d/.test(categoryTitle.value)) {
     return alert("Удалите цифры из название категории");
   }
-  let categoryList = document.createElement("li");
-  categoryList.innerHTML = `<label for="${categoryTitle.value}" class="checkbox-label">
-      <input checked id="${categoryTitle.value}" type="checkbox" class="checkbox" value="${categoryTitle.value}"/>
-      <span class="check-style"></span>
-      ${categoryTitle.value}
-      <div><svg class="svg svg-categories" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg></div>
-  </label>`;
-  categoriesList.append(categoryList);
+  if (categoryTitle.value == "") {
+    return;
+  }
   if (localCategories == "") {
     localCategories += categoryTitle.value;
   } else {
     localCategories += "," + categoryTitle.value;
   }
-  incomeCategory();
-  expenseCategory();
   localStorage.setItem("localCategories", localCategories);
-  let svg = document.querySelectorAll(".svg-categories");
-  deleteCategories(svg);
-  ActiveCategories.push(categoryTitle.value);
-  // ничего лучше как перезагрузка страницы не придумал
   location.reload();
 };
 let svg = document.querySelectorAll(".svg-categories");
@@ -132,10 +126,15 @@ function restoreCategory() {
     AllCategories = localCategories.split(",").forEach(function (el) {
       document.querySelector(`#${el}`).addEventListener("input", function () {
         if (!ActiveCategories.includes(el)) {
-          ActiveCategories.push(el);
+          if (ActiveCategories == "") {
+            ActiveCategories += el;
+          } else {
+            ActiveCategories += `,${el}`;
+          }
           localStorage.setItem("ActiveCategories", ActiveCategories);
         } else {
-          ActiveCategories = ActiveCategories.filter((item) => el != item);
+          ActiveCategories = ActiveCategories.replace(el, "");
+          ActiveCategories = ActiveCategories.replace(",", "");
           localStorage.setItem("ActiveCategories", ActiveCategories);
         }
       });
@@ -155,11 +154,11 @@ const incomeSelect = document.querySelector("#incomeSelect");
 const incomeBtn = document.querySelector("#incomeBtn");
 const incomesList = document.querySelector("#incomes");
 
-// спасибо челику
 incomeData.value = new Date().toISOString().substring(0, 10);
 
 let localIncomes = localStorage.getItem("localIncomes") || "";
 function restoreIncomes() {
+  // if (ActiveCategories == '') {
   let i = 1;
   localIncomes.split("/").forEach(function (el) {
     let incomeList = document.createElement("li");
@@ -189,6 +188,9 @@ function restoreIncomes() {
       i++;
     });
   });
+  // }else{
+  //   console.log()
+  // }
 }
 if (localIncomes != "") {
   restoreIncomes();
@@ -211,25 +213,28 @@ incomeBtn.onclick = function () {
   balanceTag.textContent = `${
     Number(balanceTag.textContent) + Number(incomeSum.value)
   }`;
+  if (incomeSelect.value == "") {
+    return alert("Задайте категорию");
+  }
+  if (incomeTitle.value == "") {
+    return alert("Введите название");
+  }
+  if (incomeSum.value == "") {
+    return alert("Введите сумму");
+  }
+  if (incomeData.value == "") {
+    return alert("Введите дату");
+  }
   // форматирование
   // let result =  Number(balanceTag.textContent) + Number(incomeSum.value)
   // balanceTag.textContent = format.format(result)
   localStorage.setItem("balance", Number(balanceTag.textContent));
-  let incomeList = document.createElement("li");
-  incomeList.setAttribute("class", "list");
-  incomeList.textContent = `Загаловок: ${incomeTitle.value}, сумма: ${incomeSum.value}, дата: ${incomeData.value}, категория: ${incomeSelect.value}`;
-  let trash = document.createElement("div");
-  trash.innerHTML =
-    '<svg class="green-svg income-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
-  incomeList.append(trash);
-  incomesList.append(incomeList);
   localIncomes += `/${incomeTitle.value},${incomeSum.value},${incomeData.value},${incomeSelect.value}/`;
   localIncomes = localIncomes.replace("//", "/");
   if (localIncomes[0] == "/") {
     localIncomes = localIncomes.slice(1);
   }
   localStorage.setItem("localIncomes", localIncomes);
-  // ничего лучше как перезагрузка страницы не придумал
   location.reload();
 };
 
@@ -328,18 +333,22 @@ expenseBtn.onclick = function () {
   balanceTag.textContent = `${
     Number(balanceTag.textContent) - Number(expenseSum.value)
   }`;
+  if (expenseSelect.value == "") {
+    return alert("Задайте категорию");
+  }
+  if (expenseTitle.value == "") {
+    return alert("Введите название");
+  }
+  if (expenseSum.value == "") {
+    return alert("Введите сумму");
+  }
+  if (expenseData.value == "") {
+    return alert("Введите дату");
+  }
   // форматирование
   // let result =  Number(balanceTag.textContent) - Number(expenseSum.value)
   // balanceTag.textContent = format.format(result)
   localStorage.setItem("balance", Number(balanceTag.textContent));
-  let expenseList = document.createElement("li");
-  expenseList.setAttribute("class", "list");
-  expenseList.textContent = `Загаловок: ${expenseTitle.value}, сумма: ${expenseSum.value}, дата: ${expenseData.value}, категория: ${expenseSelect.value}`;
-  let trash = document.createElement("div");
-  trash.innerHTML =
-    '<svg class="red-svg expense-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
-  expenseList.append(trash);
-  expensesList.append(expenseList);
   localExpenses += `/${expenseTitle.value},${expenseSum.value},${expenseData.value},${expenseSelect.value}/`;
   localExpenses = localExpenses.replace("//", "/");
   if (localExpenses[0] == "/") {

@@ -68,6 +68,9 @@ let AllCategories = [];
 
 if (localCategories != "") {
   let localCategoriesArr = localCategories.split(",").forEach(function (el) {
+    if (el == "") {
+      return;
+    }
     let categoryList = document.createElement("li");
     categoryList.innerHTML = `<label for="${el}" class="checkbox-label">
       <input id="${el}" type="checkbox" class="checkbox" value="${el}"/>
@@ -97,6 +100,7 @@ categoryBtn.onclick = function () {
   } else {
     localCategories += "," + categoryTitle.value;
   }
+  localCategories = localCategories.replace(",,", ",");
   localStorage.setItem("localCategories", localCategories);
   location.reload();
 };
@@ -111,12 +115,22 @@ function deleteCategories(svg) {
       localCategories.split(",").forEach(function (el) {
         if (some == el) {
           localCategories = localCategories.replace(el, "");
-          localCategories = localCategories.replace(",", "");
+          localCategories = localCategories.replace(",,", ",");
+          ActiveCategories = ActiveCategories.replace(el, "");
+          ActiveCategories = ActiveCategories.replace(",,", ",");
+          if (ActiveCategories[0] == ",") {
+            ActiveCategories = ActiveCategories.slice(1);
+          }
+        }
+        if (localCategories[0] == ",") {
+          localCategories = localCategories.slice(1);
         }
       });
+
       el.parentNode.parentNode.parentNode.remove();
       incomeCategory();
       expenseCategory();
+      localStorage.setItem("ActiveCategories", ActiveCategories);
       localStorage.setItem("localCategories", localCategories);
     };
   });
@@ -124,6 +138,9 @@ function deleteCategories(svg) {
 function restoreCategory() {
   if (localCategories != "") {
     AllCategories = localCategories.split(",").forEach(function (el) {
+      if (el == "") {
+        return;
+      }
       document.querySelector(`#${el}`).addEventListener("input", function () {
         if (!ActiveCategories.includes(el)) {
           if (ActiveCategories == "") {
@@ -131,11 +148,25 @@ function restoreCategory() {
           } else {
             ActiveCategories += `,${el}`;
           }
+          ActiveCategories = ActiveCategories.replace(",,", ",");
           localStorage.setItem("ActiveCategories", ActiveCategories);
+          document.querySelectorAll(".income-svg").forEach(function (el) {
+            el.parentNode.parentNode.remove();
+          });
+          restoreIncomes();
+          deleteIncomes();
         } else {
           ActiveCategories = ActiveCategories.replace(el, "");
-          ActiveCategories = ActiveCategories.replace(",", "");
+          ActiveCategories = ActiveCategories.replace(",,", ",");
+          if (ActiveCategories[0] == ",") {
+            ActiveCategories = ActiveCategories.slice(1);
+          }
           localStorage.setItem("ActiveCategories", ActiveCategories);
+          document.querySelectorAll(".income-svg").forEach(function (el) {
+            el.parentNode.parentNode.remove();
+          });
+          restoreIncomes();
+          deleteIncomes();
         }
       });
     });
@@ -158,7 +189,6 @@ incomeData.value = new Date().toISOString().substring(0, 10);
 
 let localIncomes = localStorage.getItem("localIncomes") || "";
 function restoreIncomes() {
-  // if (ActiveCategories == '') {
   let i = 1;
   localIncomes.split("/").forEach(function (el) {
     let incomeList = document.createElement("li");
@@ -168,29 +198,53 @@ function restoreIncomes() {
       if (i == 1) {
         incomeList.textContent = `Загаловок: ${elem}`;
         resultList = incomeList.textContent + ", ";
+        console.log(resultList);
       } else if (i == 2) {
         incomeList.textContent = `сумма: ${elem}`;
         resultList = resultList + incomeList.textContent + ", ";
+        console.log(resultList);
       } else if (i == 3) {
         incomeList.textContent = `дата: ${elem}`;
         resultList = resultList + incomeList.textContent + ", ";
+        console.log(resultList, i);
       } else {
-        incomeList.textContent = `категория: ${elem}`;
-        resultList = resultList + incomeList.textContent + " ";
-        i = 0;
-        incomeList.textContent = resultList;
-        let trash = document.createElement("div");
-        trash.innerHTML =
-          '<svg class="green-svg income-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
-        incomeList.append(trash);
-        incomesList.append(incomeList);
+        if (
+          localStorage.getItem("ActiveCategories") == "" ||
+          localStorage.getItem("ActiveCategories") == null
+        ) {
+          incomeList.textContent = `категория: ${elem}`;
+          resultList = resultList + incomeList.textContent + " ";
+          i = 0;
+          incomeList.textContent = resultList;
+          let trash = document.createElement("div");
+          trash.innerHTML =
+            '<svg class="green-svg income-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
+          incomeList.append(trash);
+          incomesList.append(incomeList);
+        } else if (
+          localStorage.getItem("ActiveCategories").includes(elem) &&
+          elem != ""
+        ) {
+          console.log(resultList, i);
+          incomeList.textContent = `категория: ${elem}`;
+          resultList = resultList + incomeList.textContent + " ";
+          i = 0;
+          incomeList.textContent = resultList;
+          console.log(resultList, i);
+          let trash = document.createElement("div");
+          trash.innerHTML =
+            '<svg class="green-svg income-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
+          incomeList.append(trash);
+          incomesList.append(incomeList);
+        } else {
+          incomeList.textContent = "";
+          resultList = "";
+          i = 0;
+        }
       }
       i++;
     });
   });
-  // }else{
-  //   console.log()
-  // }
 }
 if (localIncomes != "") {
   restoreIncomes();
@@ -238,35 +292,38 @@ incomeBtn.onclick = function () {
   location.reload();
 };
 
-document.querySelectorAll(".income-svg").forEach(function (el) {
-  el.onclick = function () {
-    let Node = el.parentNode.parentNode;
-    Node.textContent = Node.textContent.replace("Загаловок: ", "");
-    Node.textContent = Node.textContent.replace(" сумма: ", "");
-    Node.textContent = Node.textContent.replace(" дата: ", "");
-    Node.textContent = Node.textContent.replace(" категория: ", "");
-    Node.textContent = Node.textContent.slice(0, -1);
-    localIncomes.split("/").forEach(function (elem) {
-      // elem.split(",").forEach(function (word) {
-      //   if (Number(word) >= 1) {
-      //     balanceTag.textContent = `${
-      //       Number(balanceTag.textContent) - Number(word)
-      //     }`;
-      //     localStorage.setItem("balance", Number(balanceTag.textContent));
-      //   }
-      // });
-      if (Node.textContent == elem) {
-        localIncomes = localIncomes.replace(elem, "");
-        localIncomes = localIncomes.replace("//", "/");
-        if (localIncomes[0] == "/") {
-          localIncomes = localIncomes.slice(1, -1);
+function deleteIncomes() {
+  document.querySelectorAll(".income-svg").forEach(function (el) {
+    el.onclick = function () {
+      let Node = el.parentNode.parentNode;
+      Node.textContent = Node.textContent.replace("Загаловок: ", "");
+      Node.textContent = Node.textContent.replace(" сумма: ", "");
+      Node.textContent = Node.textContent.replace(" дата: ", "");
+      Node.textContent = Node.textContent.replace(" категория: ", "");
+      Node.textContent = Node.textContent.slice(0, -1);
+      localIncomes.split("/").forEach(function (elem) {
+        // elem.split(",").forEach(function (word) {
+        //   if (Number(word) >= 1) {
+        //     balanceTag.textContent = `${
+        //       Number(balanceTag.textContent) - Number(word)
+        //     }`;
+        //     localStorage.setItem("balance", Number(balanceTag.textContent));
+        //   }
+        // });
+        if (Node.textContent == elem) {
+          localIncomes = localIncomes.replace(elem, "");
+          localIncomes = localIncomes.replace("//", "/");
+          if (localIncomes[0] == "/") {
+            localIncomes = localIncomes.slice(1, -1);
+          }
+          localStorage.setItem("localIncomes", localIncomes);
         }
-        localStorage.setItem("localIncomes", localIncomes);
-      }
-    });
-    Node.remove();
-  };
-});
+      });
+      Node.remove();
+    };
+  });
+}
+deleteIncomes();
 // end incomes
 
 // expenses

@@ -31,9 +31,8 @@ if (is_auth) {
 const format = new Intl.NumberFormat("ru-RU");
 if (localStorage.getItem("balance") != null) {
   balanceTag.textContent = localStorage.getItem("balance");
-  // balanceTag.textContent = format.format(localStorage.getItem("balance"));
 } else {
-  balanceTag.textContent = 0;
+  balanceTag.textContent = new Intl.NumberFormat("ru-RU").format(0);
 }
 // end auth
 
@@ -153,8 +152,13 @@ function restoreCategory() {
           document.querySelectorAll(".income-svg").forEach(function (el) {
             el.parentNode.parentNode.remove();
           });
+          document.querySelectorAll(".expense-svg").forEach(function (el) {
+            el.parentNode.parentNode.remove();
+          });
           restoreIncomes();
           deleteIncomes();
+          restoreExpenses();
+          deleteExpenses()
         } else {
           ActiveCategories = ActiveCategories.replace(el, "");
           ActiveCategories = ActiveCategories.replace(",,", ",");
@@ -165,8 +169,13 @@ function restoreCategory() {
           document.querySelectorAll(".income-svg").forEach(function (el) {
             el.parentNode.parentNode.remove();
           });
+          document.querySelectorAll(".expense-svg").forEach(function (el) {
+            el.parentNode.parentNode.remove();
+          });
           restoreIncomes();
           deleteIncomes();
+          restoreExpenses();
+          deleteExpenses()
         }
       });
     });
@@ -198,15 +207,12 @@ function restoreIncomes() {
       if (i == 1) {
         incomeList.textContent = `Загаловок: ${elem}`;
         resultList = incomeList.textContent + ", ";
-        console.log(resultList);
       } else if (i == 2) {
         incomeList.textContent = `сумма: ${elem}`;
         resultList = resultList + incomeList.textContent + ", ";
-        console.log(resultList);
       } else if (i == 3) {
         incomeList.textContent = `дата: ${elem}`;
         resultList = resultList + incomeList.textContent + ", ";
-        console.log(resultList, i);
       } else {
         if (
           localStorage.getItem("ActiveCategories") == "" ||
@@ -225,12 +231,10 @@ function restoreIncomes() {
           localStorage.getItem("ActiveCategories").includes(elem) &&
           elem != ""
         ) {
-          console.log(resultList, i);
           incomeList.textContent = `категория: ${elem}`;
           resultList = resultList + incomeList.textContent + " ";
           i = 0;
           incomeList.textContent = resultList;
-          console.log(resultList, i);
           let trash = document.createElement("div");
           trash.innerHTML =
             '<svg class="green-svg income-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
@@ -264,9 +268,11 @@ function incomeCategory() {
 incomeCategory();
 
 incomeBtn.onclick = function () {
-  balanceTag.textContent = `${
+  balanceTag.textContent = balanceTag.textContent.replace(/\s/g, "");
+  balanceTag.textContent = new Intl.NumberFormat("ru-RU").format(
     Number(balanceTag.textContent) + Number(incomeSum.value)
-  }`;
+  );
+  localStorage.setItem("balance", balanceTag.textContent);
   if (incomeSelect.value == "") {
     return alert("Задайте категорию");
   }
@@ -279,10 +285,7 @@ incomeBtn.onclick = function () {
   if (incomeData.value == "") {
     return alert("Введите дату");
   }
-  // форматирование
-  // let result =  Number(balanceTag.textContent) + Number(incomeSum.value)
-  // balanceTag.textContent = format.format(result)
-  localStorage.setItem("balance", Number(balanceTag.textContent));
+
   localIncomes += `/${incomeTitle.value},${incomeSum.value},${incomeData.value},${incomeSelect.value}/`;
   localIncomes = localIncomes.replace("//", "/");
   if (localIncomes[0] == "/") {
@@ -302,14 +305,6 @@ function deleteIncomes() {
       Node.textContent = Node.textContent.replace(" категория: ", "");
       Node.textContent = Node.textContent.slice(0, -1);
       localIncomes.split("/").forEach(function (elem) {
-        // elem.split(",").forEach(function (word) {
-        //   if (Number(word) >= 1) {
-        //     balanceTag.textContent = `${
-        //       Number(balanceTag.textContent) - Number(word)
-        //     }`;
-        //     localStorage.setItem("balance", Number(balanceTag.textContent));
-        //   }
-        // });
         if (Node.textContent == elem) {
           localIncomes = localIncomes.replace(elem, "");
           localIncomes = localIncomes.replace("//", "/");
@@ -354,15 +349,37 @@ function restoreExpenses() {
         expenseList.textContent = `дата: ${elem}`;
         resultList = resultList + expenseList.textContent + ", ";
       } else {
-        expenseList.textContent = `категория: ${elem}`;
-        resultList = resultList + expenseList.textContent + " ";
-        i = 0;
-        expenseList.textContent = resultList;
-        let trash = document.createElement("div");
-        trash.innerHTML =
-          '<svg class="red-svg expense-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
-        expenseList.append(trash);
-        expensesList.append(expenseList);
+        if (
+          localStorage.getItem("ActiveCategories") == "" ||
+          localStorage.getItem("ActiveCategories") == null
+        ) {
+          expenseList.textContent = `категория: ${elem}`;
+          resultList = resultList + expenseList.textContent + " ";
+          i = 0;
+          expenseList.textContent = resultList;
+          let trash = document.createElement("div");
+          trash.innerHTML =
+            '<svg class="red-svg expense-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
+          expenseList.append(trash);
+          expensesList.append(expenseList);
+        } else if (
+          localStorage.getItem("ActiveCategories").includes(elem) &&
+          elem != ""
+        ) {
+          expenseList.textContent = `категория: ${elem}`;
+          resultList = resultList + expenseList.textContent + " ";
+          i = 0;
+          expenseList.textContent = resultList;
+          let trash = document.createElement("div");
+          trash.innerHTML =
+            '<svg class="red-svg expense-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 448 512"><path fill="#efefef" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>';
+          expenseList.append(trash);
+          expensesList.append(expenseList);
+        } else {
+          expenseList.textContent = "";
+          resultList = "";
+          i = 0;
+        }
       }
       i++;
     });
@@ -387,9 +404,12 @@ function expenseCategory() {
 expenseCategory();
 
 expenseBtn.onclick = function () {
-  balanceTag.textContent = `${
+  balanceTag.textContent = balanceTag.textContent.replace(/\s/g, "");
+  console.log(balanceTag.textContent);
+  balanceTag.textContent = new Intl.NumberFormat("ru-RU").format(
     Number(balanceTag.textContent) - Number(expenseSum.value)
-  }`;
+  );
+  localStorage.setItem("balance", balanceTag.textContent);
   if (expenseSelect.value == "") {
     return alert("Задайте категорию");
   }
@@ -402,10 +422,6 @@ expenseBtn.onclick = function () {
   if (expenseData.value == "") {
     return alert("Введите дату");
   }
-  // форматирование
-  // let result =  Number(balanceTag.textContent) - Number(expenseSum.value)
-  // balanceTag.textContent = format.format(result)
-  localStorage.setItem("balance", Number(balanceTag.textContent));
   localExpenses += `/${expenseTitle.value},${expenseSum.value},${expenseData.value},${expenseSelect.value}/`;
   localExpenses = localExpenses.replace("//", "/");
   if (localExpenses[0] == "/") {
@@ -414,33 +430,28 @@ expenseBtn.onclick = function () {
   localStorage.setItem("localExpenses", localExpenses);
   location.reload();
 };
-document.querySelectorAll(".expense-svg").forEach(function (el) {
-  el.onclick = function () {
-    let Node = el.parentNode.parentNode;
-    Node.textContent = Node.textContent.replace("Загаловок: ", "");
-    Node.textContent = Node.textContent.replace(" сумма: ", "");
-    Node.textContent = Node.textContent.replace(" дата: ", "");
-    Node.textContent = Node.textContent.replace(" категория: ", "");
-    Node.textContent = Node.textContent.slice(0, -1);
-    localExpenses.split("/").forEach(function (elem) {
-      // elem.split(",").forEach(function (word) {
-      //   if (Number(word) >= 1) {
-      //     balanceTag.textContent = `${
-      //       Number(balanceTag.textContent) - Number(word)
-      //     }`;
-      //     localStorage.setItem("balance", Number(balanceTag.textContent));
-      //   }
-      // });
-      if (Node.textContent == elem) {
-        localExpenses = localExpenses.replace(elem, "");
-        localExpenses = localExpenses.replace("//", "/");
-        if (localExpenses[0] == "/") {
-          localExpenses = localExpenses.slice(1, -1);
+function deleteExpenses() {
+  document.querySelectorAll(".expense-svg").forEach(function (el) {
+    el.onclick = function () {
+      let Node = el.parentNode.parentNode;
+      Node.textContent = Node.textContent.replace("Загаловок: ", "");
+      Node.textContent = Node.textContent.replace(" сумма: ", "");
+      Node.textContent = Node.textContent.replace(" дата: ", "");
+      Node.textContent = Node.textContent.replace(" категория: ", "");
+      Node.textContent = Node.textContent.slice(0, -1);
+      localExpenses.split("/").forEach(function (elem) {
+        if (Node.textContent == elem) {
+          localExpenses = localExpenses.replace(elem, "");
+          localExpenses = localExpenses.replace("//", "/");
+          if (localExpenses[0] == "/") {
+            localExpenses = localExpenses.slice(1, -1);
+          }
+          localStorage.setItem("localExpenses", localExpenses);
         }
-        localStorage.setItem("localExpenses", localExpenses);
-      }
-      Node.remove();
-    });
-  };
-});
+        Node.remove();
+      });
+    };
+  });
+}
+deleteExpenses()
 // end expenses

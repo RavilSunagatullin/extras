@@ -63,6 +63,8 @@ function equalsFunc() {
   createHistory(`${preResult} = ${result}`);
   input.value = result;
 }
+//пересчет из милисекунд
+//или возврат значений
 
 let today = new Date();
 let hour = today.getHours();
@@ -101,14 +103,17 @@ function refreshData() {
     day = "0" + day;
   }
 }
-
+// востановление
 const lists = document.querySelector(".lists");
+// не [] а ''
 let historyArr = JSON.parse(localStorage.getItem("historyArr")) || [];
+// ?
 if (!historyArr == []) {
   historyArr.forEach(function (item) {
     let char = localStorage.getItem(item);
     let historyItem = document.createElement("li");
     historyItem.setAttribute("class", "item");
+    // не используется
     refreshData();
     historyItem.textContent = `${char}`;
     checkHistory();
@@ -127,7 +132,7 @@ function createHistory(item) {
   historyArr.push(id);
   localStorage.setItem("historyArr", JSON.stringify(historyArr));
   checkHistory();
-  
+  // добавление спереди
   lists.insertAdjacentElement("afterbegin", historyItem)
 }
 
@@ -139,7 +144,7 @@ itemsList.onclick = function () {
         if (localStorage.getItem(item) === el.textContent) {
           let index = historyArr.indexOf(item);
           historyArr = historyArr.splice(index + 1, 1);
-          console.log(historyArr);
+          // ошибка при удалении 1 элемента
           localStorage.setItem("historyArr", JSON.stringify(historyArr));
           localStorage.removeItem(item);
         }
@@ -149,7 +154,7 @@ itemsList.onclick = function () {
     };
   });
 };
-
+// смысл?
 function checkHistory() {
   if (historyArr.length > 13) {
     document.querySelector("#main").classList.toggle(".positionAbsulute");

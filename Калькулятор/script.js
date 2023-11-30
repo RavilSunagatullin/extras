@@ -55,6 +55,9 @@ function numFunc(num) {
 function equalsFunc() {
   let preResult = input.value.replace(/[A-Z]/gi, "");
   preResult = preResult.replace(/[А-Я]/gi, "");
+  // signsArr.forEach(function(el){
+  //   preResult = preResult.replace(/elel/gi, "");
+  // })
   let result = eval(preResult);
   if (!Number.isInteger(result)) {
     result = result.toFixed(4);

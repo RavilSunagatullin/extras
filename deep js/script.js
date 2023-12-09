@@ -2,6 +2,7 @@
 // ========================================================================
 // // В js все объекты
 // // Класс Object самый главный
+// prototype
 // // Как создать Object
 // const person = {
 //   name: "Name",
@@ -313,3 +314,325 @@
 //     size:100,
 //     color:'red'
 // })
+
+// async await
+// ========================================================================
+// const delay = (ms) => {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve();
+//     }, ms);
+//   });
+// };
+// const url = "https://jsonplaceholder.typicode.com/todos";
+
+// подход через промисы
+// function fetchTodos() {
+//   console.log("start");
+//   return delay(1000)
+//     .then(() => {
+//       return fetch(url);
+//     })
+//     .then((response) => response.json());
+// }
+
+// fetchTodos()
+//   .then((data) => {
+//     console.log(data);
+//   })
+//   .catch((e) => console.log(e));
+
+// async await
+// async function fetchTodos() {
+//   console.log("start");
+//   try {
+//     await delay(1000);
+//     const resonpse = await fetch(url);
+//     const data = await resonpse.json();
+//     console.log(data);
+//   } catch (e) {
+//     console.error(e);
+//   }
+// }
+// fetchTodos();
+
+// proxy
+// ========================================================================
+// objects
+// ====
+// const person = {
+//     name:'Name',
+//     age:1,
+//     isStupid:false
+// }
+// const objectProxy = new Proxy(person, {
+//     get(target, prop) {
+//         console.log('get')
+//         return target[prop]
+//     },
+//     set(target, prop, value){
+//         if(prop in target){
+//             target[prop] = value
+//         }else{
+//             throw new Error('error')
+//         }
+//     },
+//     has(target, prop){
+//         return ['age', 'name', 'isStupid'].includes(prop)
+//     },
+//     deleteProperty(target, prop){
+//         console.log('deleted', prop)
+//         delete target[prop]
+//         return true
+//     }
+// })
+// functions
+// ====
+// const log = text =>{
+//   return text
+// }
+// const functionProxy = new Proxy(log, {
+//     apply(target, thisArg, args){
+//         console.log('apply')
+//         return target.apply(thisArg, args).toUpperCase()
+//     }
+// })
+// classes
+// ====
+// class Person {
+//     constructor(name, age){
+//         this.name = name
+//         this.age = age
+//     }
+// }
+// const ClassProxy = new Proxy(Person, {
+//     construct(target, args){
+//         console.log('construct')
+//         return new Proxy(new target(...args), {
+//             get(t, prop){
+//                 console.log('construct 2')
+//                 return t[prop]
+//             }
+//         })
+//     }
+// })
+
+// const p = new ClassProxy('P', 1)
+
+// практика
+// ====
+// wrapper
+// const withDefaultValue = (target, defaultValue) => {
+//   return new Proxy(target, {
+//     get: (obj, prop) => (prop in obj ? obj[prop] : defaultValue),
+//   });
+// };
+// const position = withDefaultValue(
+//   {
+//     x: 24,
+//     y: 42,
+//   },
+//   0
+// );
+
+// // hiden properties
+// const withHidenProps = (target, prefix = "_") => {
+//   return new Proxy(target, {
+//     has: (obj, prop) => prop in obj && !prop.startsWith(prefix),
+//     ownKeys: (obj) => Reflect.ownKeys(obj).filter((p) => !p.startsWith(prefix)),
+//     get: (obj, prop, receiver) => (prop in receiver ? obj[prop] : void 0),
+//   });
+// };
+// const data = withHidenProps({
+//   name:'name',
+//   age:1,
+//   _uid:'uid'
+// })
+
+// Генераторы
+// ========================================================================
+
+// function* strGenerator() {
+//   yield 'h'
+//   yield 'e'
+//   yield 'l'
+//   yield 'l'
+//   yield 'o'
+// }
+// const str =  strGenerator()
+// console.log(str.next())
+
+// function* numberGen(n = 10){
+//   for(let i = 1; i<=n; i++){
+//     yield i
+//   }
+// }
+// const num = numberGen(7)
+// console.log(num.next())
+
+// аналог
+// const iterator = {
+//   [Symbol.iterator](n = 10) {
+//     let i = 0;
+//     return {
+//       next() {
+//         if (i < n) {
+//           return { value: ++i, done: false };
+//         }
+//         return { value: undefined, done: true };
+//       },
+//     };
+//   },
+// };
+
+// for (let k of iterator){
+//   console.log(k)
+// }
+// for (let k of numberGen()){
+//   console.log(k)
+// }
+
+// Array
+// ========================================================================
+// const people = [
+//   { name: "Владилен", age: 25, budget: 40000 },
+//   { name: "Елена", age: 17, budget: 3400 },
+//   { name: "Игорь", age: 49, budget: 50000 },
+//   { name: "Михаил", age: 15, budget: 1800 },
+//   { name: "Василиса", age: 24, budget: 25000 },
+//   { name: "Виктория", age: 38, budget: 2300 },
+// ];
+// 1
+// for(let i = 0; i<people.length; i++){
+//   console.log(people[i])
+// }
+// 2
+// for (let k of people) {
+//   console.log(k);
+// }
+
+// 3
+// function(object, index, array)
+// текущий объект, индекс, сам массив
+
+// people.forEach(element => {
+//   console.log(element)
+// });
+
+// Map
+// ====
+// const newPeople = people.map(person => {
+//   return {
+//     name:person.name,
+//     age:person.age
+//   }
+// })
+// console.log(newPeople)
+
+// Filter
+// ====
+// const adults = []
+// for(let i = 0; i<people.length; i++){
+//   if(people[i].age >= 18){
+//     adults.push(people[i])
+//   }
+// }
+
+// const adults  = people.filter(person => {
+//   if(person.age >= 18){
+//     return true
+//   }
+// })
+
+// const adults  = people.filter(person => person.age >= 18)
+
+// Reduce
+// ====
+// let amount = 0
+// for(let i = 0; i<people.length; i++){
+//   amount += people[i].budget
+// }
+
+// const amount = people.reduce((total, person) => {
+//   return total + person.budget
+// }, 0);
+
+// const amount = people.reduce((total, person) =>total + person.budget, 0);
+
+// find
+// ====
+// const igor = people.find((person) => person.name === "Игорь");
+// findIndex
+// ====
+// const igorInx = people.findIndex((person) => person.name === "Игорь");
+
+// практика
+// const amount = people
+//   .filter((person) => person.budget > 3000)
+//   .map((person) => {
+//     return {
+//       info: `${person.name} (${person.age})`,
+//       budget: person.budget,
+//     };
+//   })
+//   .reduce((total, person)=> total + person.budget, 0)
+
+// Map
+// ========================================================================
+// const obj = {
+//   name: "Object",
+//   length: 1,
+// };
+// const arr = [
+//   ["name", "Map"],
+//   ["length", 1],
+// ];
+// console.log(Object.entries(obj))
+// console.log(Object.fromEntries(arr))
+
+// const map = new Map(arr);
+// map.set("uid", "213124124").set(obj, "value obj").set(NaN, "NaN");
+
+// map.delete(NaN);
+// console.log(map, map.size, map.has(NaN));
+// map.clear()
+
+// console.log(map.get("name"));
+// console.log(obj.name);
+
+// ====
+
+// for (let [key, value] of map){
+//     console.log([key, value])
+// }
+// for(let value of map.values()){
+//   console.log(value)
+// }
+// for(let value of map.keys()){
+//   console.log(value)
+// }
+// map.forEach((value, key, map)=>{
+//   console.log(value, key)
+// })
+// ====
+// const arrOfMap = [...map]
+// const arrOfMap = Array.from(map)
+// const objOfMap = Object.fromEntries(map)
+// ====
+// const users = [
+//   {name:'name1'},
+//   {name:'name2'},
+//   {name:'name3'},
+// ]
+
+// const visits = new Map()
+// visits
+//   .set(users[0], new Date())
+//   .set(users[1], new Date())
+//   .set(users[2], new Date())
+
+// function lastVisit(user){
+//   return visits.get(user)
+// }
+
+// ====

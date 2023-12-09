@@ -636,3 +636,66 @@
 // }
 
 // ====
+// Set упрощенный map
+// const set = new Set(['1', 2,  2, true, NaN])
+
+// set.add(void 0).add(2)
+
+// set.values()
+// set.keys()
+// set.entries()
+
+// set.has(void 0)
+// set.size
+// set.delete(void 0)
+// set.has(void 0)
+// set.size
+// set.clear()
+// set.size
+
+// практика
+// function uniqValues(array){
+//     return [...new Set(array)]
+// }
+// console.log(uniqValues([1, 2, 2, 3, 4, 3]))
+
+// ====
+// weak map
+// let obj = {name:'weak-map'}
+// const arr = [obj]
+// obj = null
+
+
+// get set delete has и все
+// const map = new WeakMap([
+//     [obj, 'obj data']
+// ])
+// obj = null
+// ====
+// const cash = new WeakMap()
+// function cashUser(user){
+//     if(!cash.has(user)){
+//         cash.set(user, Date.now())
+//     }
+//     return cash.get(user)
+// }
+
+// let user1 = {name:'name'}
+// let user2 = {name:'name2'}
+
+// cashUser(user1)
+// cashUser(user2)
+
+// user1 = null
+
+// weakset
+// ====
+// const users = [
+//   {name:'name1'},
+//   {name:'name2'},
+//   {name:'name3'},
+// ]
+// const visits = new WeakSet()
+// visits.add(users[0]).add(users[1])
+
+// users.splice(1, 1)

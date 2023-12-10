@@ -665,7 +665,6 @@
 // const arr = [obj]
 // obj = null
 
-
 // get set delete has и все
 // const map = new WeakMap([
 //     [obj, 'obj data']
@@ -699,3 +698,85 @@
 // visits.add(users[0]).add(users[1])
 
 // users.splice(1, 1)
+
+// feetch, ajax, xhr
+// ========================================================================
+// const URL = "https://jsonplaceholder.typicode.com/users";
+
+// function sendRequest(method, url, body = null) {
+//   return new Promise((resolve, reject) => {
+//     const xhr = new XMLHttpRequest();
+
+//     xhr.open(method, url);
+
+//     xhr.responseType = "json";
+//     xhr.setRequestHeader('Content-Type', 'application/json')
+
+//     xhr.onload = () => {
+//       if (xhr.status >= 400) {
+//         return reject(xhr.response);
+//       }
+//       resolve(xhr.response);
+//     };
+
+//     xhr.onerror = () => {
+//       reject(xhr.response);
+//     };
+
+//     xhr.send(JSON.stringify(body));
+//   });
+// }
+// // sendRequest("GET", URL)
+// //     .then(data => console.log(data))
+// //     .catch(err => console.error(err))
+
+// const person = {
+//     name:"name",
+//     age:26
+// }
+// sendRequest("POST", URL, person)
+//     .then(data => console.log(data))
+//     .catch(err => console.error(err))
+
+// feetch
+// ====
+// const URL = "https://jsonplaceholder.typicode.com/users";
+
+// async function sendRequest(method, url, body = null) {
+//   try {
+//     const resonpse = await fetch(url, {
+//       method: method,
+//       body: JSON.stringify(body),
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     return await resonpse.json();
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
+
+// // sendRequest("GET", URL)
+// //     .then(data => console.log(data))
+// //     .catch(err => console.error(err))
+
+// const person = {
+//   name: "name",
+//   age: 26,
+// };
+
+// sendRequest("POST", URL, person)
+//   .then((data) => console.log(data))
+//   .catch((err) => console.error(err));
+
+// rest, spread
+// ========================================================================
+const citiesRu = ["Москва", "Санкт-Петербург", "Казань", "Новосибирск"];
+const citiesEr = ["Париж", "Прага", "Берлин"];
+
+//spread
+console.log(...citiesRu)
+console.log(...citiesEr)
+
+const allCities = [...citiesRu, ...citiesEr]

@@ -772,11 +772,57 @@
 
 // rest, spread
 // ========================================================================
-const citiesRu = ["Москва", "Санкт-Петербург", "Казань", "Новосибирск"];
-const citiesEr = ["Париж", "Прага", "Берлин"];
+// const citiesRu = ["Москва", "Санкт-Петербург", "Казань", "Новосибирск"];
+// const citiesEu = ["Париж", "Прага", "Берлин"];
+
+// const citiesRussion = {
+//     Moscow: 20,
+//     SP: 8,
+//     Kazan: 5,
+// }
+// const citiesEurope = {
+//     Berlin: 20,
+//     Paris: 8,
+//     Praha: 5,
+// }
 
 //spread
-console.log(...citiesRu)
-console.log(...citiesEr)
+// console.log(...citiesRu)
+// console.log(...citiesEu)
 
-const allCities = [...citiesRu, ...citiesEr]
+// const allCities = [...citiesRu, ...citiesEu]
+// // !!! не console.log(...citiesRussion)
+// const allCity = {...citiesRussion, ...citiesEurope}
+
+// const numbers = [6, 23, 54, 1, -1]
+// console.log(Math.max(5, 37, 42, 17, ...numbers))
+
+// rest
+// ====
+// function sum(...rest){
+//     return rest.reduce((a, i)=> a+i, 0)
+// }
+// const num = [1, 2, 3, 4, 5, 10]
+
+// spread
+// console.log(sum(...num))
+
+// const [a, b, ...other] = num
+
+// деструктурзация
+// ========================================================================
+// function calcValues(a, b) {
+//   return [a + b, undefined, a * b, a / b];
+// }
+// const [sum = "+", sub = "-", mult, ...other] = calcValues(15, 10);
+
+// const obj = {
+//   name: "name",
+//   num: 12,
+//   values: {
+//     fr: 12,
+//     second: 123,
+//   },
+// };
+
+// const { name: secondName, values, key = "no key", num } = obj;

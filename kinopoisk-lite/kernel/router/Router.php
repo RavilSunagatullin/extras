@@ -3,6 +3,7 @@
 namespace App\Kernel\router;
 
 use App\Kernel\controller\Controller;
+use App\Kernel\Http\Request;
 use App\Kernel\view\View;
 
 class Router
@@ -13,7 +14,8 @@ class Router
     ];
 
     public function __construct(
-        private View $view
+        private View $view,
+        private Request $request,
     )
     {
 
@@ -40,6 +42,7 @@ class Router
             /** @var Controller $controller */
             $controller = new $controller();
             call_user_func([$controller, 'setView'], $this->view);
+            call_user_func([$controller, 'setRequest'], $this->request);
             call_user_func([$controller, $action]);
         } else {
             call_user_func($route->getAction()());

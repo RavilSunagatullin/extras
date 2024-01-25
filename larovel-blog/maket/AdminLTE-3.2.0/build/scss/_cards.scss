@@ -284,9 +284,9 @@ html.maximized-card {
 
 // Box Body
 .card-body {
-  // @include border-radius-sides(0, 0, $border-radius, $border-radius);
+  // @includes border-radius-sides(0, 0, $border-radius, $border-radius);
   // .no-header & {
-  //   @include border-top-radius($border-radius);
+  //   @includes border-top-radius($border-radius);
   // }
 
   // Tables within the box body

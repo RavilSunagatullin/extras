@@ -51,6 +51,20 @@
                                             <div class="text-danger mt-2">Error, {{$message}}</div>
                                             @enderror
                                         </div>
+                                        <div class="form-group">
+                                            <label for="select-category">Select role</label>
+                                            <select name="role" id="select-category" class="form-control">
+                                                @foreach($roles as $id => $role)
+                                                    <option value="{{$id}}" {{$id == $user->role ? 'selected': ''}}>{{$role}}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('role')
+                                            <div class="text-danger mt-2">Error, {{$message}}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="hidden" name="user_id" value="{{$user->id}}">
+                                        </div>
                                         <button type="submit" class="btn btn-primary">Update</button>
                                     </div>
                                 </form>

@@ -51,10 +51,13 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="userPassword">Create user password</label>
-                                            <input type="text" class="form-control" id="userPassword"
-                                                   placeholder="Enter password" name="password" value="{{old('password')}}">
-                                            @error('password')
+                                            <label for="select-category">Select role</label>
+                                            <select name="role" id="select-category" class="form-control">
+                                                @foreach($roles as $id => $role)
+                                                    <option value="{{$id}}" {{$id == old('role_id')? 'selected': ''}}>{{$role}}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('role')
                                             <div class="text-danger mt-2">Error, {{$message}}</div>
                                             @enderror
                                         </div>

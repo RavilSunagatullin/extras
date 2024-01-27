@@ -7,6 +7,7 @@ use App\Models\User;
 class EditUserController
 {
     public function edit(User $user){
-        return view('admin.users.edit', compact('user'));
+        $roles= User::getRoles();
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 }

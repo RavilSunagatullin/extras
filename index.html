@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class enemy {
+    constructor(name, health) {
+        this.name = name;
+        this.damage = 10;
+        this.health = health;
+    }
+}
+
+class player {
+    constructor(hp, damage, money, name) {
+        this.hp = hp;
+        this.damage_close = damage;
+        this.name = name;
+        this.money = money;
+        this.hp_potion = 0;
+        this.strength_armor = 0;
+        this.is_alive = true;
+    }
+
+    damage(enemy) {
+        if (enemy.health < 11) {
+            console.log(enemy.name + " умирает от рук " + this.name);
+            enemy.health -= this.damage_close;
+        } else {
+            enemy.health -= this.damage_close;
+            console.log(this.name + " наносит 10 урона " + enemy.name);
+            console.log("У " + enemy.name + " " + enemy.health + " hp.\n");
+        }
+    }
+
+    healing() {
+        if (this.hp_potion >= 1) {
+            if (this.hp == 100) {
+                console.log(this.name + " здоров.\n");
+            } else {
+                this.hp += 15;
+                this.hp_potion -= 1;
+                console.log(" Вы лечите себя на 10 hp, теперь у вас " + this.hp + ".\n");
+            }
+        } else {
+            console.log("У вас нет зелий.");
+        }
+    }
+
+    training() {
+        this.money -= 100;
+        this.damage_close += 10;
+        console.log("Обновление в ваших характеристиках: \n" +
+            "Урон: " + (this.damage_close - 10) + " -> " + this.damage_close + "\n" +
+            "Баланс: " + (this.money + 100) + " -> " + this.money + "\n");
+    }
+
+    show() {
+        console.log("Характеристики: \n" +
+            "Здоровье: " + this.hp + "\n" +
+            "Урон: " + this.damage_close + "\n" +
+            "Баланс: " + this.money + "\n" +
+            "Имя: " + this.name + "\n" +
+            "Состояние брони: " + this.strength_armor + "%\n");
+    }
+
+    guild() {
+        let r_event = random(1, 100);
+        let r_damage = random(5, 25);
+        let r_chance = random(1, 100);
+        let r_pay = random(40, 100);
+
+        switch (r_event) {
+            case 81:
+                console.log("Идя на задание вы нашли потеренный кошелёк, вы искали хозяина этого кошелька полчаса,\nно так и не нашил и решили забрать его себе.\nВы получаете 100 монет.");
+                this.money += 100;
+                break;
+            case 87:
+                console.log("Когда вы шли на задание из травы выпрыгивает змея и кусает вас.\nВы теряете 10 hp.");
+                this.hp -= 10;
+                break;
+            case 1:
+                console.log("Когда вы шли на задание в вас влетает на сверхзвуковой кабочок.\nВы теряете " + (this.hp - 1) + " hp.");
+                this.hp -= (this.hp - 1);
+                break;
+            default:
+                break;
+        }
+
+        console.log("Взяв задание на " + r_pay + ".");
+        if (r_chance <= 20) {
+            console.log(" Вы выполнели его без получения урона. ");
+            this.money += r_pay;
+        } else if (r_chance > 20 && r_chance < 90) {
+            console.log("Вы выполнели его, но всё прошло не гладко и вы получили " + r_damage + " урона.");
+            this.money += r_pay;
+            if (this.strength_armor > 0) {
+                this.strength_armor -= r_damage;
+            } else {
+                this.hp -= r_damage;
+            }
+        } else if (r_chance >= 90) {
+            console.log("Вы проваливаете задание получив " + r_damage * 2 + " урона.");
+            if (this.strength_armor > 0) {
+                this.strength_armor -= r_damage * 2;
+            } else {
+                this.hp -= r_damage * 2;
+            }
+        }
+
+        if (this.hp < 0) {
+            this.is_alive = false;
+        }
+        if (this.strength_armor < 0) {
+            this.strength_armor += Math.abs(this.strength_armor);
+        }
+    }
+
+    shop() {
+        console.log("Справочный материал для магазина нажав на:\n" +
+            "y -Вы можете купить зелий за \n" +
+            "n - Вы можите купить броню\n" +
+            "Вы можете купить зелье возтановления за 100 монет или купить броню.\n" +
+            "Хотите купить? \n" +
+            "Нажмите 'y' если хотите купить зелье и 'n' если броню, чтобы выйти нажмите 'e' для выхода ");
+
+        // let userInput_shop = _getch();
+        let number;
+
+        // if (userInput_shop == 121) {
+        //     console.log("Сколько зелий вы хотите купить?");
+        //     console.log("Введите число: ");
+        //     number = parseInt(prompt());
+        //     if (this.money > (100 * number)) {
+        //         this.money -= (100 * number);
+        //         this.hp_potion += (1 * number);
+        //         console.log("Вы купиле зелье теперь у вас " + this.hp_potion + " зелий и " + this.money + " монет.");
+        //     } else {
+        //         console.log("Недостаточно средств.");
+        //     }
+        // } else if (userInput_shop == 110) {
+        //     if (this.money > 500) {
+        //         if (this.strength_armor >= 100) {
+        //             console.log("Ваша броня в идеальном состоянии.");
+        //         } else {
+        //             this.strength_armor += (100);
+        //             this.money -= 500;
+        //             console.log("Вы купиле броню, у которой  " + this.strength_armor + " прочность и " + this.money + " монет.");
+        //         }
+        //     } else {
+        //         console.log("Недостаточно средств.");
+        //     }
+        // }
+
+        console.log("Вы покидаете магазин.");
+    }
+}
+
+function random(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+let ivan = new player(100, 10, 10000, "Ivan");
+let pav = new enemy("Pavel", 100);
+
+console.log("Справочный материал нажав на:\n" +
+    "s - Вы отобразите характеристика \n" +
+    "t - Вы за 100 монет получите добавку к урону \n" +
+    "g - Вы сходите в гильдию и попытаетесь выполнить их задание \n" +
+    "m - Вы можете сходить в магазин купить зелье");
+
+// while (ivan.is_alive) {
+//     let userInput = _getch();
+
+//     switch (userInput) {
+//         case 104:
+//             ivan.healing();
+//             break;
+//         case 100:
+//             ivan.damage(pav);
+//             break;
+//         case 115:
+//             ivan.show();
+//             break;
+//         case 116:
+//             ivan.training();
+//             break;
+//         case 103:
+//             ivan.guild();
+//             break;
+//         case 109:
+//             ivan.shop();
+//             break;
+//         default:
+//             console.log("Введено недопустимое действие!");
+//     }
+// }
+
+console.log("\nВы мертвы...");
+
+
+
+    </script>
+</body>
+</html>

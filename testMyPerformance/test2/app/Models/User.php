@@ -46,4 +46,7 @@ class User extends Authenticatable
     {
         return $this->is_admin === 1;
     }
+    public function books(){
+        return $this->belongsToMany(Book::class);
+    }
 }
